@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Detail Challenge</title>
+
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            background: #E8F5E9;
+            font-family: Inter, Arial;
+            display: flex;
+            justify-content: center;
+        }
+
+        .screen {
+            width: 90%;
+            max-width: 500px;
+            background: white;
+            border-radius: 20px;
+            padding: 30px;
+            margin: 20px auto;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.1);
+            box-sizing: border-box;
+            text-align: center;
+            min-height: 100vh;
+        }
+
+        h2 {
+            color: #4CAF50;
+            margin: 0 0 15px;
+            font-size: 24px;
+            font-weight: 600;
+        }
+
+        p {
+            font-size: 15px;
+            color: #444;
+            line-height: 1.5;
+            margin-bottom: 25px;
+        }
+
+        .btn {
+            display: block;
+            background: #4CAF50;
+            color: white;
+            padding: 12px;
+            border-radius: 12px;
+            font-weight: bold;
+            text-decoration: none;
+            font-size: 15px;
+            margin-top: 10px;
+        }
+
+        .back {
+            display: block;
+            margin-top: 25px;
+            color: #4CAF50;
+            font-size: 15px;
+            text-decoration: none;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="screen">
+        <h2 id="title">Challenge</h2>
+        <p id="desc"></p>
+
+        <a href="upload.html" class="btn">Upload Proof</a>
+        <a href="challenge.html" class="back">&lt; Kembali</a>
+    </div>
+
+    <script>
+        // Ambil parameter ?ch=1
+        const params = new URLSearchParams(location.search);
+        const ch = params.get("ch");
+
+        // Data challenge sesuai tampilan sebelumnya
+        const challenges = {
+            "1": {
+                title: "🚶‍♂️ Jalan Kaki / Sepeda",
+                desc: "Lakukan eco transport selama 7 hari."
+            },
+            "2": {
+                title: "🌱 Menanam Tanaman",
+                desc: "Rawat 1 tanaman selama 7 hari."
+            },
+            "3": {
+                title: "🧴 Daur Ulang Botol",
+                desc: "Kumpulkan & daur ulang botol plastik selama 7 hari."
+            }
+        };
+
+        // Update tampilan
+        if (challenges[ch]) {
+            document.getElementById("title").innerText = challenges[ch].title;
+            document.getElementById("desc").innerText = challenges[ch].desc;
+        }
+    </script>
+</body>
+</html>

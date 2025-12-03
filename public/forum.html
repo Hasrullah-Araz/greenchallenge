@@ -1,0 +1,198 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Tips & Forum - Green Challenge</title>
+
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            font-family: Inter, Arial;
+            background: #E8F5E9;
+            display: flex;
+            justify-content: center;
+        }
+
+        .screen {
+            width: 95%;
+            max-width: 1100px;
+            background: white;
+            min-height: 100vh;
+            margin: 30px auto;
+            border-radius: 24px;
+            padding: 40px;
+            box-shadow: 0 12px 30px rgba(0, 0, 0, 0.12);
+            box-sizing: border-box;
+            text-align: center;
+        }
+
+        h2 {
+            color: #4CAF50;
+            margin-top: 0;
+            font-size: 30px;
+        }
+
+        .tip-card {
+            margin: 18px 0;
+            padding: 22px;
+            background: #F1FFF1;
+            border-radius: 14px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.06);
+        }
+
+        textarea {
+            width: 100%;
+            height: 110px;
+            border-radius: 12px;
+            border: 1px solid #CCC;
+            padding: 14px;
+            font-size: 15px;
+            margin-top: 12px;
+            resize: none;
+            box-sizing: border-box;
+        }
+
+        .btn-post {
+            width: 100%;
+            margin-top: 12px;
+            padding: 15px;
+            background: linear-gradient(90deg,#4CAF50,#66BB6A);
+            color: white;
+            border: none;
+            border-radius: 12px;
+            font-size: 17px;
+            font-weight: bold;
+            cursor: pointer;
+        }
+
+        .btn-clear {
+            width: 100%;
+            margin-top: 12px;
+            padding: 15px;
+            background: #D32F2F;
+            color: white;
+            border: none;
+            border-radius: 12px;
+            font-size: 17px;
+            font-weight: bold;
+            cursor: pointer;
+        }
+
+        .forum-list {
+            margin-top: 25px;
+        }
+
+        .msg {
+            background: #F8FFF8;
+            border-radius: 14px;
+            padding: 16px;
+            margin-bottom: 14px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.06);
+        }
+
+        .msg-user, .msg-text {
+            text-align: center;
+        }
+
+        .back-btn {
+            margin-top: 30px;
+        }
+
+        .back-btn a {
+            text-decoration: none;
+            color: #4CAF50;
+            font-weight: bold;
+            font-size: 17px;
+            text-align: center;
+        }
+    </style>
+</head>
+<body>
+
+<div class="screen">
+
+    <h2>Tips & Forum</h2>
+
+    <h3 style="color:#2E7D32; font-size:22px;">Tips Lingkungan</h3>
+
+    <div class="tip-card">
+        <h4>🌱 Kurangi Plastik</h4>
+        <p>Bawa tas belanja sendiri dan hindari kantong plastik sekali pakai.</p>
+    </div>
+
+    <div class="tip-card">
+        <h4>💡 Hemat Listrik</h4>
+        <p>Matikan lampu dan alat elektronik ketika tidak digunakan.</p>
+    </div>
+
+    <div class="tip-card">
+        <h4>🚶‍♂️ Transportasi Hijau</h4>
+        <p>Gunakan sepeda atau berjalan kaki untuk perjalanan dekat.</p>
+    </div>
+
+    <div class="tip-card">
+        <h4>♻️ Daur Ulang</h4>
+        <p>Pisahkan sampah organik dan anorganik agar mudah didaur ulang.</p>
+    </div>
+
+    <h3>Forum Diskusi</h3>
+
+    <textarea id="forumInput" placeholder="Tulis pendapat atau pengalaman ramah lingkungan..."></textarea>
+    <button class="btn-post" onclick="postForum()">Posting</button>
+    <button class="btn-clear" onclick="clearForum()">🗑 Bersihkan Forum</button>
+
+    <div class="forum-list" id="forumList"></div>
+
+    <div class="back-btn">
+        <a href="dashboard.html">← Kembali ke Dashboard</a>
+    </div>
+</div>
+
+<script>
+    let forumData = JSON.parse(localStorage.getItem("forumData") || "[]");
+
+    function renderForum() {
+        const c = document.getElementById("forumList");
+        c.innerHTML = "";
+
+        forumData.forEach(msg => {
+            c.innerHTML += `
+                <div class="msg">
+                    <div class="msg-user">🌿 ${msg.user}</div>
+                    <div class="msg-text">${msg.text}</div>
+                </div>
+            `;
+        });
+    }
+
+    function postForum() {
+        const input = document.getElementById("forumInput");
+        const text = input.value.trim();
+        if(text === "") return alert("Tulisan tidak boleh kosong!");
+
+        let user = JSON.parse(localStorage.getItem("greenUser"));
+        let username = user?.username || "User";
+
+        forumData.push({ user: username, text });
+
+        localStorage.setItem("forumData", JSON.stringify(forumData));
+
+        input.value = "";
+        renderForum();
+    }
+
+    function clearForum() {
+        if(confirm("Yakin ingin menghapus seluruh forum?")) {
+            localStorage.removeItem("forumData");
+            forumData = [];
+            renderForum();
+        }
+    }
+
+    renderForum();
+</script>
+
+</body>
+</html>

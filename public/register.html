@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+<title>Register - Green Challenge</title>
+
+<style>
+    body {
+        margin: 0;
+        padding: 0;
+        background: #E8F5E9;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        height: 100vh;
+        font-family: Inter, Arial;
+    }
+
+    .screen {
+        width: 100%;
+        max-width: 420px;
+        background: white;
+        padding: 30px;
+        border-radius: 18px;
+        box-shadow: 0 8px 30px rgba(0, 0, 0, 0.1);
+        text-align: center;
+    }
+
+    h2 {
+        color: #2E7D32;
+        margin-bottom: 20px;
+        font-size: 24px;
+    }
+
+    input {
+        width: 92%;
+        padding: 12px;
+        border: 2px solid #C8E6C9;
+        border-radius: 10px;
+        margin-bottom: 12px;
+        font-size: 15px;
+    }
+
+    button {
+        width: 94%;
+        padding: 12px;
+        background: #4CAF50;
+        color: white;
+        border: none;
+        border-radius: 10px;
+        font-size: 16px;
+        font-weight: bold;
+        cursor: pointer;
+        margin-top: 5px;
+    }
+
+    button:hover {
+        background: #43A047;
+    }
+
+    a {
+        color: #4CAF50;
+        text-decoration: none;
+        display: block;
+        margin-top: 12px;
+        font-size: 14px;
+    }
+
+    #msg {
+        color: #d32f2f;
+        margin-top: 10px;
+        min-height: 20px;
+        font-size: 14px;
+        white-space: pre-line;
+    }
+</style>
+</head>
+
+<body>
+<div class="screen">
+    <h2>Buat Akun Baru</h2>
+
+    <input id="email" type="email" placeholder="Email" />
+    <input id="username" type="text" placeholder="Username" />
+    <input id="password" type="password" placeholder="Password" />
+
+    <button onclick="registerUser()">Register</button>
+    <a href="login.html">Sudah punya akun? Login</a>
+
+    <div id="msg"></div>
+</div>
+
+<script>
+async function registerUser() {
+    const email = document.getElementById("email").value.trim();
+    const username = document.getElementById("username").value.trim();
+    const password = document.getElementById("password").value.trim();
+    const msg = document.getElementById("msg");
+
+    msg.innerText = "";
+
+    if (!email || !username || !password) {
+        msg.innerText = "Semua kolom harus diisi.";
+        return;
+    }
+
+    try {
+        const res = await fetch("/api/auth/register", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ email, username, password }),
+        });
+
+        const data = await res.json();
+
+        if (!data.success) {
+            msg.innerText = data.msg || "Gagal melakukan registrasi.";
+            return;
+        }
+
+        alert("Registrasi berhasil! Silakan login.");
+        window.location.href = "login.html";
+
+    } catch (err) {
+        msg.innerText = "Terjadi error koneksi ke server.";
+        console.error(err);
+    }
+}
+</script>
+
+</body>
+</html>

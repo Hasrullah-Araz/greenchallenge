@@ -1,0 +1,268 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard - Green Challenge</title>
+
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            background: #E8F5E9;
+            font-family: Inter, Arial;
+            display: flex;
+            justify-content: center;
+        }
+
+        .screen {
+            width: 90%;
+            max-width: 1200px;
+            min-height: 100vh;
+            background: white;
+            padding: 40px;
+            margin: 20px auto;
+            border-radius: 20px;
+            box-sizing: border-box;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.08);
+        }
+
+        @media (max-width:480px){
+            .screen { max-width: 390px; padding: 20px; }
+        }
+
+        .header {
+            display: flex;
+            justify-content: flex-start;
+        }
+
+        .avatar {
+            width: 48px;
+            height: 48px;
+            background: #C8E6C9;
+            border-radius: 50%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-weight: bold;
+            color: #2E7D32;
+            font-size: 20px;
+        }
+
+        .welcome {
+            margin-top: 12px;
+            text-align: center;
+        }
+
+        .welcome h2 {
+            margin: 0;
+            color: #4CAF50;
+            font-size: 24px;
+        }
+
+        .welcome span {
+            font-size: 14px;
+            color: #666;
+            margin-top: 4px;
+            display: block;
+        }
+
+        .summary {
+            margin-top: 30px;
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+            gap: 20px;
+        }
+
+        .card {
+            background: #F1FFF1;
+            border-radius: 14px;
+            padding: 20px;
+            text-align: center;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.07);
+        }
+
+        .icon {
+            font-size: 32px;
+            margin-bottom: 8px;
+        }
+
+        .card h4 {
+            margin: 0;
+            font-size: 16px;
+            color: #2E7D32;
+        }
+
+        .card p {
+            margin: 6px 0 0;
+            font-size: 24px;
+            font-weight: bold;
+            color: #1B5E20;
+        }
+
+        .menu-section {
+            margin-top: 40px;
+            text-align: center;
+        }
+
+        .menu-section h3 {
+            color: #4CAF50;
+            margin-bottom: 20px;
+            font-size: 20px;
+        }
+
+        .menu-list {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 16px;
+        }
+
+        @media (min-width:768px){
+            .menu-list {
+                flex-direction: row;
+                justify-content: center;
+                flex-wrap: wrap;
+            }
+        }
+
+        .menu-btn {
+            width: 260px;
+            background: white;
+            border: 2px solid #C8E6C9;
+            padding: 16px;
+            border-radius: 14px;
+            font-size: 16px;
+            color: #2E7D32;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            font-weight: bold;
+            text-decoration: none;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.05);
+            justify-content: center;
+        }
+
+        .menu-btn:hover {
+            background: #F1FFF1;
+            border-color: #A5D6A7;
+        }
+
+        .menu-icon {
+            font-size: 22px;
+        }
+    </style>
+</head>
+
+
+<body>
+<div class="screen">
+
+    <div class="header">
+        <div class="avatar" id="avatarLetter">U</div>
+    </div>
+
+    <div class="welcome">
+        <h2>Welcome to Green Challenge</h2>
+        <span>Mulai perjalanan ramah lingkunganmu 🌿</span>
+    </div>
+
+    <div class="summary">
+        <div class="card">
+            <div class="icon">⭐</div>
+            <h4>Total Points</h4>
+            <p id="pointsValue">0</p>
+        </div>
+
+        <div class="card">
+            <div class="icon">📷</div>
+            <h4>Proof Uploaded</h4>
+            <p id="proofValue">0</p>
+        </div>
+
+        <div class="card">
+            <div class="icon">📁</div>
+            <h4>Storage</h4>
+            <p id="storageValue">0%</p>
+        </div>
+
+        <div class="card">
+            <div class="icon">🏅</div>
+            <h4>Badges</h4>
+            <p id="badgeValue">0</p>
+        </div>
+    </div>
+
+
+    <div class="menu-section">
+        <h3>Menu Utama</h3>
+
+        <div class="menu-list">
+            <a href="challenge.html" class="menu-btn">
+                <span class="menu-icon">📝</span> Pilih Challenge
+            </a>
+
+            <a href="achievement.html" class="menu-btn">
+                <span class="menu-icon">🏆</span> Achievement Board
+            </a>
+
+            <a href="forum.html" class="menu-btn">
+                <span class="menu-icon">💬</span> Tips & Forum
+            </a>
+
+            <a href="login.html" class="menu-btn">
+                <span class="menu-icon">🚪</span> Logout
+            </a>
+        </div>
+    </div>
+
+</div>
+
+
+<script>
+let user = JSON.parse(localStorage.getItem("greenUser") || "{}");
+
+if (!user.id) {
+    window.location.href = "login.html";
+}
+
+// Set avatar
+document.getElementById("avatarLetter").innerText =
+    (user.username || "U").charAt(0).toUpperCase();
+
+
+// LOAD PROFILE FROM BACKEND
+async function loadProfile() {
+    try {
+        const res = await fetch(`/api/user/profile?id=${user.id}`);
+        const data = await res.json();
+
+        if (!data || data.success === false) return;
+
+        let points = data.points || 0;
+        let proofs = data.proofs || 0;
+        let storage = proofs; // 1 file = 1%
+        let badges = Math.floor(points / 50);
+
+        // update UI
+        document.getElementById("pointsValue").innerText = points;
+        document.getElementById("proofValue").innerText = proofs;
+        document.getElementById("storageValue").innerText = storage + "%";
+        document.getElementById("badgeValue").innerText = badges;
+
+        // simpan ke localStorage
+        user.points = points;
+        user.proofs = proofs;
+        user.badges = badges;
+        localStorage.setItem("greenUser", JSON.stringify(user));
+
+    } catch (err) {
+        console.error("Error loading profile:", err);
+    }
+}
+
+loadProfile();
+</script>
+
+</body>
+</html>
