@@ -118,8 +118,4 @@ public/
 
 Buka:
 
-http://localhost:3000/login.html
-
-👥 Forum
-
-Forum menggunakan localStorage, tidak memakai backend API.
+http://localhost:3000/register.html
